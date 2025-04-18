@@ -7,7 +7,7 @@ import 'screens/admin/manage_requests_screen.dart';
 import 'screens/admin/add_edit_car_screen.dart';
 import 'screens/admin/request_detail_screen.dart';
 import 'screens/admin/profile_screen.dart';
-import 'package:rent_a_car/models/request_model.dart'; // Adjust the path if necessary
+import 'package:rent_a_car/models/request_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

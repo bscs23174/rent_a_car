@@ -1,21 +1,34 @@
-class Car {
-  String id;
-  String name;
-  String imageUrl;
-  double pricePerDay;
+class CarModel {
+  final String id;
+  final String title;
+  final String type;
+  final double pricePerDay;
+  final String imageUrl;
 
-  Car({required this.id, required this.name, required this.imageUrl, required this.pricePerDay});
+  CarModel({
+    required this.id,
+    required this.title,
+    required this.type,
+    required this.pricePerDay,
+    required this.imageUrl,
+  });
 
-  Map<String, dynamic> toMap() {
-    return {"id": id, "name": name, "imageUrl": imageUrl, "pricePerDay": pricePerDay};
+  factory CarModel.fromMap(String id, Map<String, dynamic> data) {
+    return CarModel(
+      id: id,
+      title: data['title'] ?? '',
+      type: data['type'] ?? '',
+      pricePerDay: (data['pricePerDay'] ?? 0).toDouble(),
+      imageUrl: data['imageUrl'] ?? '',
+    );
   }
 
-  static Car fromMap(Map<String, dynamic> map) {
-    return Car(
-      id: map['id'],
-      name: map['name'],
-      imageUrl: map['imageUrl'],
-      pricePerDay: map['pricePerDay'],
-    );
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'type': type,
+      'pricePerDay': pricePerDay,
+      'imageUrl': imageUrl,
+    };
   }
 }

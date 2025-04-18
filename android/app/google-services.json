@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "478240068238",
+    "project_id": "rent-a-car-blank",
+    "storage_bucket": "rent-a-car-blank.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:478240068238:android:e78bb287aa7ad30b6aafdf",
+        "android_client_info": {
+          "package_name": "com.blank.rent_a_car"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrvfGVD-kS4GqdnNSgOWcHNvtgPwrLX5E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,68 +1,89 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AdminHomeScreen extends StatelessWidget {
   const AdminHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final tiles = [
+      _DashboardTile(
+        icon: Icons.directions_car,
+        label: 'Manage Cars',
+        onTap: () => Navigator.pushNamed(context, '/manageCars'),
+      ),
+      _DashboardTile(
+        icon: Icons.receipt_long,
+        label: 'Manage Requests',
+        onTap: () => Navigator.pushNamed(context, '/manageRequests'),
+      ),
+      _DashboardTile(
+        icon: Icons.person,
+        label: 'Profile',
+        onTap: () => Navigator.pushNamed(context, '/profile'),
+      ),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Admin Dashboard'),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildTile(
-              icon: Icons.directions_car,
-              label: 'Manage Cars',
-              onTap: () {
-                Navigator.pushNamed(context, '/manageCars');
-              },
-            ),
-            const SizedBox(height: 16),
-            _buildTile(
-              icon: Icons.receipt_long,
-              label: 'Manage Requests',
-              onTap: () {
-                Navigator.pushNamed(context, '/manageRequests');
-              },
-            ),
-            const SizedBox(height: 16),
-            _buildTile(
-              icon: Icons.person,
-              label: 'Profile',
-              onTap: () {
-                Navigator.pushNamed(context, '/profile');
-              },
-            ),
-          ],
+        child: Center(
+          child: GridView.count(
+            crossAxisCount: 1, // Use 2 if you want two tiles side by side
+            crossAxisSpacing: 24,
+            mainAxisSpacing: 24,
+            childAspectRatio: 2.8,
+            shrinkWrap: true,
+            children: tiles,
+          ),
         ),
       ),
     );
   }
+}
 
-  Widget _buildTile({
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.indigo.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, size: 32, color: Colors.indigo),
-            const SizedBox(width: 16),
-            Text(label, style: const TextStyle(fontSize: 18)),
-          ],
+class _DashboardTile extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _DashboardTile({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      elevation: 3,
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        splashColor: Colors.indigo.withOpacity(0.2),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          child: Row(
+            children: [
+              Icon(icon, size: 36, color: Colors.indigo),
+              const SizedBox(width: 20),
+              Text(
+                label,
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const Spacer(),
+              const Icon(Icons.arrow_forward_ios, size: 20, color: Colors.grey),
+            ],
+          ),
         ),
       ),
     );

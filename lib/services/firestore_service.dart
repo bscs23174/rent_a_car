@@ -44,4 +44,24 @@ class FirestoreService {
     }
     return null;
   }
+
+  // ───── Car Details ─────────────────────
+
+  Future<CarModel> getCarDetails(String requestId) async {
+    final requestDoc = await _db.collection('requests').doc(requestId).get();
+    if (!requestDoc.exists) {
+      throw Exception('Request not found');
+    }
+
+    final requestData = requestDoc.data()!;
+    final carId = requestData['carId'];  // Assuming carId is stored in the request document
+
+    final carDoc = await _db.collection('cars').doc(carId).get();
+    if (!carDoc.exists) {
+      throw Exception('Car not found');
+    }
+
+    final carData = carDoc.data()!;
+    return CarModel.fromMap(carDoc.id, carData);
+  }
 }

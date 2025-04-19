@@ -7,14 +7,18 @@ class AdminAuthService {
     try {
       final result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       return result.user;
-    } catch (e) {
-      print('Login failed: $e');
-      return null;
+    } on FirebaseAuthException catch (e) {
+      print('Login failed: ${e.message}');
+      throw Exception(e.message);  // Rethrow error for better error handling
     }
   }
 
   Future<void> signOut() async {
-    await _auth.signOut();
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      print('Sign out failed: $e');
+    }
   }
 
   User? get currentUser => _auth.currentUser;

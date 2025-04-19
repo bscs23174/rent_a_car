@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../models/car_model.dart';
 import '../../services/firestore_service.dart';
 
 class AddEditCarScreen extends StatefulWidget {
-  final CarModel? car; // Car passed if editing an existing car
+  final CarModel? car;
 
   const AddEditCarScreen({super.key, this.car});
 
@@ -12,12 +13,11 @@ class AddEditCarScreen extends StatefulWidget {
 }
 
 class _AddEditCarScreenState extends State<AddEditCarScreen> {
+  final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _typeController = TextEditingController();
   final _priceController = TextEditingController();
   final _imageUrlController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-
   final FirestoreService _firestoreService = FirestoreService();
 
   bool _isLoading = false;
@@ -36,12 +36,10 @@ class _AddEditCarScreenState extends State<AddEditCarScreen> {
   Future<void> _saveCar() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => _isLoading = true);
 
     final car = CarModel(
-      id: widget.car?.id ?? '', // If editing, keep existing ID
+      id: widget.car?.id ?? '',
       title: _titleController.text.trim(),
       type: _typeController.text.trim(),
       pricePerDay: double.parse(_priceController.text.trim()),
@@ -49,25 +47,66 @@ class _AddEditCarScreenState extends State<AddEditCarScreen> {
     );
 
     if (widget.car == null) {
-      // Add new car
       await _firestoreService.addCar(car);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Car added successfully!')),
+      );
     } else {
-      // Update existing car
       await _firestoreService.updateCar(car);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Car updated successfully!')),
+      );
     }
 
-    setState(() {
-      _isLoading = false;
-    });
-
+    setState(() => _isLoading = false);
     Navigator.pop(context);
+  }
+
+  Future<void> _deleteCar() async {
+    if (widget.car != null) {
+      await _firestoreService.deleteCar(widget.car!.id);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Car deleted')),
+      );
+      Navigator.pop(context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final isEdit = widget.car != null;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.car == null ? 'Add Car' : 'Edit Car'),
+        title: Text(isEdit ? 'Edit Car' : 'Add Car'),
+        actions: [
+          if (isEdit)
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: const Text('Delete Car'),
+                    content: const Text('Are you sure you want to delete this car?'),
+                    actions: [
+                      TextButton(
+                        child: const Text('Cancel'),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      TextButton(
+                        child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _deleteCar();
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+            )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -75,26 +114,28 @@ class _AddEditCarScreenState extends State<AddEditCarScreen> {
           key: _formKey,
           child: ListView(
             children: [
+              if (_imageUrlController.text.isNotEmpty)
+                Container(
+                  height: 180,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    image: DecorationImage(
+                      image: NetworkImage(_imageUrlController.text),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
               TextFormField(
                 controller: _titleController,
                 decoration: const InputDecoration(labelText: 'Car Title'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a title';
-                  }
-                  return null;
-                },
+                validator: (value) => value == null || value.isEmpty ? 'Enter title' : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _typeController,
                 decoration: const InputDecoration(labelText: 'Car Type'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a type';
-                  }
-                  return null;
-                },
+                validator: (value) => value == null || value.isEmpty ? 'Enter type' : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -102,12 +143,8 @@ class _AddEditCarScreenState extends State<AddEditCarScreen> {
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Price Per Day'),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a price';
-                  }
-                  if (double.tryParse(value) == null) {
-                    return 'Please enter a valid number';
-                  }
+                  if (value == null || value.isEmpty) return 'Enter price';
+                  if (double.tryParse(value) == null) return 'Invalid number';
                   return null;
                 },
               ),
@@ -115,19 +152,20 @@ class _AddEditCarScreenState extends State<AddEditCarScreen> {
               TextFormField(
                 controller: _imageUrlController,
                 decoration: const InputDecoration(labelText: 'Car Image URL'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter an image URL';
-                  }
-                  return null;
-                },
+                onChanged: (_) => setState(() {}),
+                validator: (value) => value == null || value.isEmpty ? 'Enter image URL' : null,
               ),
               const SizedBox(height: 24),
               _isLoading
                   ? const Center(child: CircularProgressIndicator())
-                  : ElevatedButton(
+                  : ElevatedButton.icon(
+                icon: Icon(isEdit ? Icons.save : Icons.add),
+                label: Text(isEdit ? 'Save Changes' : 'Add Car'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
                 onPressed: _saveCar,
-                child: Text(widget.car == null ? 'Add Car' : 'Save Changes'),
               ),
             ],
           ),

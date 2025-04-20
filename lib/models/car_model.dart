@@ -4,6 +4,9 @@ class CarModel {
   final String type;
   final double pricePerDay;
   final String imageUrl;
+  final String capacity;
+  final String createdBy;
+  final bool available;
 
   CarModel({
     required this.id,
@@ -11,6 +14,9 @@ class CarModel {
     required this.type,
     required this.pricePerDay,
     required this.imageUrl,
+    required this.capacity,
+    required this.createdBy,
+    required this.available,
   });
 
   factory CarModel.fromMap(String id, Map<String, dynamic> data) {
@@ -20,6 +26,9 @@ class CarModel {
       type: data['type'] ?? '',
       pricePerDay: (data['pricePerDay'] ?? 0).toDouble(),
       imageUrl: data['imageUrl'] ?? '',
+      capacity: data['capacity'] ?? '',
+      createdBy: data['createdBy'] ?? '',
+      available: data['available'] ?? true,
     );
   }
 
@@ -29,6 +38,9 @@ class CarModel {
       'type': type,
       'pricePerDay': pricePerDay,
       'imageUrl': imageUrl,
+      'capacity': capacity,
+      'createdBy': createdBy,
+      'available': available,
     };
   }
 }

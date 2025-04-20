@@ -33,6 +33,18 @@ class FirestoreService {
     });
   }
 
+  Future<void> addRequest(RequestModel request) async {
+    await _db.collection('requests').add(request.toMap());
+  }
+
+  Future<void> updateRequest(RequestModel request) async {
+    await _db.collection('requests').doc(request.id).update(request.toMap());
+  }
+
+  Future<void> deleteRequest(String id) async {
+    await _db.collection('requests').doc(id).delete();
+  }
+
   Future<void> updateRequestStatus(String id, String status) async {
     await _db.collection('requests').doc(id).update({'status': status});
   }

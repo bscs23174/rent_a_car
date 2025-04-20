@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AdminHomeScreen extends StatelessWidget {
   const AdminHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    final name = user?.displayName ?? "Admin";
+
     final tiles = [
       _DashboardTile(
         icon: Icons.directions_car,
@@ -25,20 +29,45 @@ class AdminHomeScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Admin Dashboard'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Center(
-          child: GridView.count(
-            crossAxisCount: 1, // Use 2 if you want two tiles side by side
-            crossAxisSpacing: 24,
-            mainAxisSpacing: 24,
-            childAspectRatio: 2.8,
-            shrinkWrap: true,
-            children: tiles,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFE3F2FD), Color(0xFFBBDEFB)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Welcome, $name 👋',
+                  style: GoogleFonts.poppins(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.indigo.shade900,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Here’s your dashboard',
+                  style: GoogleFonts.poppins(fontSize: 16, color: Colors.indigo.shade600),
+                ),
+                const SizedBox(height: 24),
+                Expanded(
+                  child: GridView.count(
+                    crossAxisCount: 1,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                    childAspectRatio: 2.8,
+                    children: tiles,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -60,28 +89,35 @@ class _DashboardTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      elevation: 3,
+      elevation: 6,
       color: Colors.white,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(20),
+      shadowColor: Colors.indigo.withOpacity(0.3),
       child: InkWell(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         onTap: onTap,
-        splashColor: Colors.indigo.withOpacity(0.2),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
           child: Row(
             children: [
-              Icon(icon, size: 36, color: Colors.indigo),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.indigo.shade100,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, size: 28, color: Colors.indigo),
+              ),
               const SizedBox(width: 20),
               Text(
                 label,
                 style: GoogleFonts.poppins(
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.w500,
                 ),
               ),
               const Spacer(),
-              const Icon(Icons.arrow_forward_ios, size: 20, color: Colors.grey),
+              const Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),
             ],
           ),
         ),

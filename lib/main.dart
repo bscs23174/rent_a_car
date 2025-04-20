@@ -5,8 +5,6 @@ import 'screens/admin/admin_login_screen.dart';
 import 'screens/admin/admin_home_screen.dart';
 import 'screens/admin/manage_cars_screen.dart';
 import 'screens/admin/manage_requests_screen.dart';
-import 'screens/admin/add_edit_car_screen.dart';
-import 'screens/admin/request_detail_screen.dart';
 import 'screens/admin/profile_screen.dart';
 import 'package:rent_a_car/models/request_model.dart';
 
@@ -47,11 +45,6 @@ class RentACarAdminApp extends StatelessWidget {
         '/adminHome': (context) => const AdminHomeScreen(),
         '/manageCars': (context) => const ManageCarsScreen(),
         '/manageRequests': (context) => const ManageRequestsScreen(),
-        '/add-edit-car': (context) => const AddEditCarScreen(),
-        '/requestDetail': (context) {
-          final request = ModalRoute.of(context)!.settings.arguments as RequestModel;
-          return RequestDetailScreen(request: request);
-        },
         '/profile': (context) => const ProfileScreen(),
       },
     );

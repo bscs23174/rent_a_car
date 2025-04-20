@@ -17,6 +17,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
 
   bool _isLoading = false;
   String? _error;
+  bool _isPasswordVisible = false; // Variable to toggle password visibility
 
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
@@ -69,11 +70,11 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: Colors.blue.shade50, // Added a soft background color
       body: Center(
         child: Card(
           margin: const EdgeInsets.symmetric(horizontal: 24),
-          elevation: 6,
+          elevation: 10, // Increased elevation for a better shadow effect
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Padding(
             padding: const EdgeInsets.all(24),
@@ -84,36 +85,49 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                 children: [
                   const Text(
                     'Admin Login',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueAccent,
+                    ),
                   ),
                   const SizedBox(height: 24),
                   TextFormField(
                     controller: _emailController,
                     decoration: const InputDecoration(
                       labelText: 'Email',
-                      prefixIcon: Icon(Icons.email),
+                      prefixIcon: Icon(Icons.email, color: Colors.blueAccent),
                     ),
                     keyboardType: TextInputType.emailAddress,
-                    validator: (value) =>
-                    value == null || value.isEmpty ? 'Enter email' : null,
+                    validator: (value) => value == null || value.isEmpty ? 'Enter email' : null,
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
+                    obscureText: !_isPasswordVisible, // Toggle password visibility
+                    decoration: InputDecoration(
                       labelText: 'Password',
-                      prefixIcon: Icon(Icons.lock),
+                      prefixIcon: const Icon(Icons.lock, color: Colors.blueAccent),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                          color: Colors.blueAccent,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                      ),
                     ),
-                    validator: (value) =>
-                    value == null || value.isEmpty ? 'Enter password' : null,
+                    validator: (value) => value == null || value.isEmpty ? 'Enter password' : null,
                   ),
                   const SizedBox(height: 8),
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: _resetPassword,
-                      child: const Text('Forgot Password?'),
+                      child: const Text('Forgot Password?', style: TextStyle(color: Colors.blueAccent)),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -127,6 +141,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                     label: const Text('Login'),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(48),
+                      backgroundColor: Colors.blueAccent, // Use backgroundColor instead of primary
                     ),
                   ),
                 ],

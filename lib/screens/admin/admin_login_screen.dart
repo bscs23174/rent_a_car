@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../services/admin_auth_service.dart';
 
 class AdminLoginScreen extends StatefulWidget {
+  static const String routeName = '/adminLogin';
   const AdminLoginScreen({super.key});
 
   @override
@@ -17,7 +18,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
 
   bool _isLoading = false;
   String? _error;
-  bool _isPasswordVisible = false; // Variable to toggle password visibility
+  bool _isPasswordVisible = false;
 
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
@@ -70,11 +71,11 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue.shade50, // Added a soft background color
+      backgroundColor: Colors.blue.shade50,
       body: Center(
         child: Card(
           margin: const EdgeInsets.symmetric(horizontal: 24),
-          elevation: 10, // Increased elevation for a better shadow effect
+          elevation: 10,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Padding(
             padding: const EdgeInsets.all(24),
@@ -99,18 +100,22 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                       prefixIcon: Icon(Icons.email, color: Colors.blueAccent),
                     ),
                     keyboardType: TextInputType.emailAddress,
-                    validator: (value) => value == null || value.isEmpty ? 'Enter email' : null,
+                    validator: (value) =>
+                    value == null || value.isEmpty ? 'Enter email' : null,
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _passwordController,
-                    obscureText: !_isPasswordVisible, // Toggle password visibility
+                    obscureText: !_isPasswordVisible,
                     decoration: InputDecoration(
                       labelText: 'Password',
-                      prefixIcon: const Icon(Icons.lock, color: Colors.blueAccent),
+                      prefixIcon:
+                      const Icon(Icons.lock, color: Colors.blueAccent),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                           color: Colors.blueAccent,
                         ),
                         onPressed: () {
@@ -120,28 +125,37 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                         },
                       ),
                     ),
-                    validator: (value) => value == null || value.isEmpty ? 'Enter password' : null,
+                    validator: (value) =>
+                    value == null || value.isEmpty ? 'Enter password' : null,
                   ),
                   const SizedBox(height: 8),
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: _resetPassword,
-                      child: const Text('Forgot Password?', style: TextStyle(color: Colors.blueAccent)),
+                      child: const Text('Forgot Password?',
+                          style: TextStyle(color: Colors.blueAccent)),
                     ),
                   ),
                   const SizedBox(height: 16),
                   if (_error != null)
-                    Text(_error!, style: const TextStyle(color: Colors.red)),
+                    Text(
+                      _error!,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  const SizedBox(height: 8),
                   _isLoading
                       ? const CircularProgressIndicator()
                       : ElevatedButton.icon(
                     onPressed: _handleLogin,
-                    icon: const Icon(Icons.login),
-                    label: const Text('Login'),
+                    icon: const Icon(Icons.login, color: Colors.white),
+                    label: const Text(
+                      'Login',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(48),
-                      backgroundColor: Colors.blueAccent, // Use backgroundColor instead of primary
+                      backgroundColor: Colors.blueAccent,
                     ),
                   ),
                 ],

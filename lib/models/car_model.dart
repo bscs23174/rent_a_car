@@ -1,22 +1,26 @@
+// car_model.dart
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class CarModel {
   final String id;
   final String title;
   final String type;
-  final double pricePerDay;
-  final String imageUrl;
+  final String imageURL;
+  final double ratePerDay;
   final String capacity;
-  final String createdBy;
-  final bool available;
+  final bool isRecommended;
+  final bool isAvailable;
 
   CarModel({
     required this.id,
     required this.title,
     required this.type,
-    required this.pricePerDay,
-    required this.imageUrl,
+    required this.imageURL,
+    required this.ratePerDay,
     required this.capacity,
-    required this.createdBy,
-    required this.available,
+    required this.isRecommended,
+    required this.isAvailable,
   });
 
   factory CarModel.fromMap(String id, Map<String, dynamic> data) {
@@ -24,11 +28,11 @@ class CarModel {
       id: id,
       title: data['title'] ?? '',
       type: data['type'] ?? '',
-      pricePerDay: (data['pricePerDay'] ?? 0).toDouble(),
-      imageUrl: data['imageUrl'] ?? '',
-      capacity: data['capacity'] ?? '',
-      createdBy: data['createdBy'] ?? '',
-      available: data['available'] ?? true,
+      imageURL: data['imageURL'] ?? '',
+      ratePerDay: (data['ratePerDay'] as num).toDouble(),
+      capacity: data['capacity'] ?? 0,
+      isRecommended: data['isRecommended'] ?? false,
+      isAvailable: data['isAvailable'] ?? false,
     );
   }
 
@@ -36,11 +40,19 @@ class CarModel {
     return {
       'title': title,
       'type': type,
-      'pricePerDay': pricePerDay,
-      'imageUrl': imageUrl,
+      'imageURL': imageURL,
+      'ratePerDay': ratePerDay,
       'capacity': capacity,
-      'createdBy': createdBy,
-      'available': available,
+      'isRecommended': isRecommended,
+      'isAvailable': isAvailable,
     };
+  }
+
+  Future<void> save() async {
+    await FirebaseFirestore.instance.collection('cars').doc(id).set(toMap());
+  }
+
+  Future<void> delete() async {
+    await FirebaseFirestore.instance.collection('cars').doc(id).delete();
   }
 }

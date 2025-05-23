@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AdminHomeScreen extends StatelessWidget {
+  static const String routeName = '/adminHome';
+
   const AdminHomeScreen({super.key});
 
   @override
@@ -18,8 +20,13 @@ class AdminHomeScreen extends StatelessWidget {
       ),
       _DashboardTile(
         icon: Icons.receipt_long,
-        label: 'Manage Requests',
-        onTap: () => Navigator.pushNamed(context, '/manageRequests'),
+        label: 'Manage Bookings', // better matches "booking_service"
+        onTap: () => Navigator.pushNamed(context, '/manageBookings'), // renamed route
+      ),
+      _DashboardTile(
+        icon: Icons.notifications,
+        label: 'Notifications',
+        onTap: () => Navigator.pushNamed(context, '/notifications'), // if applicable
       ),
       _DashboardTile(
         icon: Icons.person,
@@ -54,7 +61,10 @@ class AdminHomeScreen extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   'Here’s your dashboard',
-                  style: GoogleFonts.poppins(fontSize: 16, color: Colors.indigo.shade600),
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    color: Colors.indigo.shade600,
+                  ),
                 ),
                 const SizedBox(height: 24),
                 Expanded(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import '../../models/car_model.dart';
 
 class CarCard extends StatelessWidget {
@@ -16,6 +17,8 @@ class CarCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currencyFormat = NumberFormat.currency(symbol: '\$');
+
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -42,7 +45,7 @@ class CarCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Price: \$${car.pricePerDay} / day',
+                      'Price: ${currencyFormat.format(car.ratePerDay)} / day',
                       style: GoogleFonts.poppins(
                         fontSize: 14,
                         color: Colors.grey[700],

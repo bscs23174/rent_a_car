@@ -28,7 +28,10 @@ class _AdminNavScreenState extends State<AdminNavScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex],
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _screens,
+      ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           boxShadow: [
@@ -66,4 +69,5 @@ class _AdminNavScreenState extends State<AdminNavScreen> {
       ),
     );
   }
+
 }

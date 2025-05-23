@@ -11,8 +11,8 @@ class RequestModel {
   final String status;
   final int timestamp;
   final String? message;
-  final double? pricePerDay;  // Optional field
-  final String? carType;      // Optional field
+  final double? pricePerDay; // Optional field
+  final String? carType;     // Optional field
 
   RequestModel({
     required this.id,
@@ -66,5 +66,39 @@ class RequestModel {
       'pricePerDay': pricePerDay,
       'carType': carType,
     };
+  }
+
+  RequestModel copyWith({
+    String? id,
+    String? userId,
+    String? userName,
+    String? userEmail,
+    String? contactPhone,
+    String? carId,
+    String? carTitle,
+    String? startDate,
+    String? endDate,
+    String? status,
+    int? timestamp,
+    String? message,
+    double? pricePerDay,
+    String? carType,
+  }) {
+    return RequestModel(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      userName: userName ?? this.userName,
+      userEmail: userEmail ?? this.userEmail,
+      contactPhone: contactPhone ?? this.contactPhone,
+      carId: carId ?? this.carId,
+      carTitle: carTitle ?? this.carTitle,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      status: status ?? this.status,
+      timestamp: timestamp ?? this.timestamp,
+      message: message ?? this.message,
+      pricePerDay: pricePerDay ?? this.pricePerDay,
+      carType: carType ?? this.carType,
+    );
   }
 }

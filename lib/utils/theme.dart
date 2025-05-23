@@ -19,6 +19,10 @@ final ThemeData lightTheme = ThemeData(
   inputDecorationTheme: const InputDecorationTheme(
     border: OutlineInputBorder(),
   ),
+  textTheme: const TextTheme(
+    bodyMedium: TextStyle(fontSize: 16),
+    titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+  ),
 );
 
 final ThemeData darkTheme = ThemeData(
@@ -39,5 +43,9 @@ final ThemeData darkTheme = ThemeData(
   ),
   inputDecorationTheme: const InputDecorationTheme(
     border: OutlineInputBorder(),
+  ),
+  textTheme: const TextTheme(
+    bodyMedium: TextStyle(fontSize: 16),
+    titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
   ),
 );

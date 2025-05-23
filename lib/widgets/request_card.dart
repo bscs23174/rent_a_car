@@ -32,7 +32,9 @@ class RequestCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    request.carTitle ?? 'Car Request',
+                    request.carTitle?.isNotEmpty == true
+                        ? request.carTitle!
+                        : 'Car Request',
                     style: GoogleFonts.poppins(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -40,7 +42,7 @@ class RequestCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Status: ${request.status}',
+                    'Status: ${request.status ?? 'Unknown'}',
                     style: GoogleFonts.poppins(
                       fontSize: 14,
                       color: Colors.grey[700],
@@ -49,7 +51,8 @@ class RequestCard extends StatelessWidget {
                 ],
               ),
             ),
-            Row(
+            const SizedBox(width: 8),
+            Column(
               children: [
                 IconButton(
                   icon: const Icon(Icons.check_circle_outline, color: Colors.green),

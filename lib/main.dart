@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:google_fonts/google_fonts.dart'; // For elegant fonts
+import 'package:provider/provider.dart';
+
+import 'utils/theme.dart';
+import 'utils/theme_provider.dart';
 import 'screens/admin/admin_login_screen.dart';
 import 'screens/admin/admin_home_screen.dart';
 import 'screens/admin/manage_cars_screen.dart';
 import 'screens/admin/manage_requests_screen.dart';
 import 'screens/admin/profile_screen.dart';
-import 'package:rent_a_car/models/request_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const RentACarAdminApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: const RentACarAdminApp(),
+    ),
+  );
 }
 
 class RentACarAdminApp extends StatelessWidget {
@@ -19,33 +26,23 @@ class RentACarAdminApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Rent a Car Admin',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
-        textTheme: GoogleFonts.poppinsTextTheme(), // Clean, modern font
-        appBarTheme: const AppBarTheme(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          foregroundColor: Colors.black,
-          centerTitle: true,
-        ),
-        pageTransitionsTheme: const PageTransitionsTheme(
-          builders: {
-            TargetPlatform.android: CupertinoPageTransitionsBuilder(), // Smooth iOS-style transitions
-            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        return MaterialApp(
+          title: 'Rent a Car Admin',
+          debugShowCheckedModeBanner: false,
+          theme: lightTheme,
+          darkTheme: darkTheme,
+          themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+          initialRoute: AdminLoginScreen.routeName,
+          routes: {
+            AdminLoginScreen.routeName: (context) => const AdminLoginScreen(),
+            AdminHomeScreen.routeName: (context) => const AdminHomeScreen(),
+            ManageCarsScreen.routeName: (context) => const ManageCarsScreen(),
+            ManageRequestsScreen.routeName: (context) => const ManageRequestsScreen(),
+            ProfileScreen.routeName: (context) => const ProfileScreen(),
           },
-        ),
-      ),
-      initialRoute: '/adminLogin',
-      routes: {
-        '/adminLogin': (context) => const AdminLoginScreen(),
-        '/adminHome': (context) => const AdminHomeScreen(),
-        '/manageCars': (context) => const ManageCarsScreen(),
-        '/manageRequests': (context) => const ManageRequestsScreen(),
-        '/profile': (context) => const ProfileScreen(),
+        );
       },
     );
   }

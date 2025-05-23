@@ -3,6 +3,8 @@ import '../../models/car_model.dart';
 import '../../services/firestore_service.dart';
 
 class ManageCarsScreen extends StatefulWidget {
+  static const String routeName = '/manageCars';
+
   const ManageCarsScreen({super.key});
 
   @override
@@ -17,7 +19,7 @@ class _ManageCarsScreenState extends State<ManageCarsScreen> {
   final _typeController = TextEditingController();
   final _priceController = TextEditingController();
   final _imageUrlController = TextEditingController();
-  String _selectedCapacity = '4'; // Default selected capacity.
+  String _selectedCapacity = '4';
   bool _available = true;
 
   final List<String> _capacityOptions = ['2', '4', '5', '8', '10'];
@@ -30,19 +32,17 @@ class _ManageCarsScreenState extends State<ManageCarsScreen> {
       _editingCar = car;
       _titleController.text = car.title;
       _typeController.text = car.type;
-      _priceController.text = car.pricePerDay.toString();
-      _imageUrlController.text = car.imageUrl;
-
-      // Ensure capacity is valid from the list of options.
+      _priceController.text = car.ratePerDay.toString();
+      _imageUrlController.text = car.imageURL;
       _selectedCapacity = _capacityOptions.contains(car.capacity) ? car.capacity : '4';
-      _available = car.available;
+      _available = car.isAvailable;
     } else {
       _editingCar = null;
       _titleController.clear();
       _typeController.clear();
       _priceController.clear();
       _imageUrlController.clear();
-      _selectedCapacity = '4'; // Reset to default capacity
+      _selectedCapacity = '4';
       _available = true;
     }
 
@@ -166,18 +166,17 @@ class _ManageCarsScreenState extends State<ManageCarsScreen> {
 
     setState(() => _isLoading = true);
 
-    // Assuming the current admin email is stored as a constant
-    final String createdBy = 'admin@company.com'; // Replace this with the actual logged-in admin email if dynamic
+    final String createdBy = 'admin@company.com';
 
     final car = CarModel(
       id: _editingCar?.id ?? '',
       title: _titleController.text.trim(),
       type: _typeController.text.trim(),
-      pricePerDay: double.parse(_priceController.text.trim()),
-      imageUrl: _imageUrlController.text.trim(),
+      ratePerDay: double.parse(_priceController.text.trim()),
+      imageURL: _imageUrlController.text.trim(),
       capacity: _selectedCapacity,
-      available: _available,
-      createdBy: createdBy, // Pass the createdBy field
+      isAvailable: _available,
+      isRecommended: false,
     );
 
     if (_editingCar == null) {
@@ -266,7 +265,7 @@ class _ManageCarsScreenState extends State<ManageCarsScreen> {
                             leading: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
                               child: Image.network(
-                                car.imageUrl,
+                                car.imageURL,
                                 width: 60,
                                 height: 60,
                                 fit: BoxFit.cover,
@@ -276,7 +275,7 @@ class _ManageCarsScreenState extends State<ManageCarsScreen> {
                               car.title,
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
-                            subtitle: Text('${car.type} - \$${car.pricePerDay.toStringAsFixed(2)} / day'),
+                            subtitle: Text('${car.type} - \$${car.ratePerDay.toStringAsFixed(2)} / day'),
                             trailing: const Icon(Icons.edit, color: Colors.blueAccent),
                             onTap: () => _showCarForm(car: car),
                           ),

@@ -2,7 +2,7 @@
     package="com.blank.rent_a_car">
 
 <application
-        android:label="rent_a_car"
+        android:label="Rent a Car(Admin)"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

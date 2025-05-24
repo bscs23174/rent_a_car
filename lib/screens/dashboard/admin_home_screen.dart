@@ -20,13 +20,13 @@ class AdminHomeScreen extends StatelessWidget {
       ),
       _DashboardTile(
         icon: Icons.receipt_long,
-        label: 'Manage Bookings', // better matches "booking_service"
-        onTap: () => Navigator.pushNamed(context, '/manageBookings'), // renamed route
+        label: 'Manage Bookings',
+        onTap: () => Navigator.pushNamed(context, '/manageRequests'),
       ),
       _DashboardTile(
         icon: Icons.notifications,
         label: 'Notifications',
-        onTap: () => Navigator.pushNamed(context, '/notifications'), // if applicable
+        onTap: () => Navigator.pushNamed(context, '/notifications'),
       ),
       _DashboardTile(
         icon: Icons.person,

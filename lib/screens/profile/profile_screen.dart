@@ -121,6 +121,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications),
+            tooltip: 'Notifications',
+            onPressed: () {
+              Navigator.pushNamed(context, '/notifications');
+            },
+          ),
           Switch(
             value: themeProvider.isDarkMode,
             onChanged: (value) => themeProvider.toggleTheme(value),

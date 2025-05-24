@@ -1,58 +1,68 @@
-// car_model.dart
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class CarModel {
   final String id;
   final String title;
   final String type;
-  final String imageURL;
-  final double ratePerDay;
   final String capacity;
-  final bool isRecommended;
-  final bool isAvailable;
+  final String imageUrl;
+  final double ratePerDay;
+  final bool available;
+  final String createdBy;
 
   CarModel({
-    required this.id,
+    this.id = '',
     required this.title,
     required this.type,
-    required this.imageURL,
-    required this.ratePerDay,
     required this.capacity,
-    required this.isRecommended,
-    required this.isAvailable,
+    required this.imageUrl,
+    required this.ratePerDay,
+    required this.available,
+    required this.createdBy,
   });
-
-  factory CarModel.fromMap(String id, Map<String, dynamic> data) {
+  CarModel copyWith({
+    String? id,
+    String? title,
+    String? type,
+    String? capacity,
+    double? ratePerDay,
+    String? imageUrl,
+    String? createdBy,
+    bool? available,
+  }) {
     return CarModel(
-      id: id,
-      title: data['title'] ?? '',
-      type: data['type'] ?? '',
-      imageURL: data['imageURL'] ?? '',
-      ratePerDay: (data['ratePerDay'] as num).toDouble(),
-      capacity: data['capacity'] ?? 0,
-      isRecommended: data['isRecommended'] ?? false,
-      isAvailable: data['isAvailable'] ?? false,
+      id: id ?? this.id,
+      title: title ?? this.title,
+      type: type ?? this.type,
+      capacity: capacity ?? this.capacity,
+      ratePerDay: ratePerDay ?? this.ratePerDay,
+      imageUrl: imageUrl ?? this.imageUrl,
+      createdBy: createdBy ?? this.createdBy,
+      available: available ?? this.available,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'title': title,
       'type': type,
-      'imageURL': imageURL,
-      'ratePerDay': ratePerDay,
       'capacity': capacity,
-      'isRecommended': isRecommended,
-      'isAvailable': isAvailable,
+      'imageUrl': imageUrl,
+      'ratePerDay': ratePerDay,
+      'available': available,
+      'createdBy': createdBy,
     };
   }
 
-  Future<void> save() async {
-    await FirebaseFirestore.instance.collection('cars').doc(id).set(toMap());
-  }
-
-  Future<void> delete() async {
-    await FirebaseFirestore.instance.collection('cars').doc(id).delete();
+  factory CarModel.fromMap(Map<String, dynamic> map, [String? id]) {
+    return CarModel(
+      id: id ?? map['id'],
+      title: map['title'] ?? '',
+      type: map['type'] ?? '',
+      capacity: map['capacity'] ?? '',
+      ratePerDay: (map['ratePerDay'] ?? 0).toDouble(),
+      imageUrl: map['imageUrl'] ?? '',
+      createdBy: map['createdBy'] ?? '',
+      available: map['available'] ?? true,
+    );
   }
 }
